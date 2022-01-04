@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mind Map</title>
+
+  <style>
+    #navbar {
+      overflow: hidden;
+      background-color: #333;
+    }
+
+    #navbar a {
+      float: left;
+      display: block;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-family: Helvetica;
+      font-size: 17px;
+    }
+
+    #navbar a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    #navbar a.active {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .content {
+      padding: 16px;
+    }
+
+    .sticky {
+      position: fixed;
+      top: 0;
+      width: 100%;
+    }
+
+    .sticky + .content {
+      padding-top: 60px;
+    }
+
+    #map-area *{
+        z-index: 0 !important;
+    }
+    </style>
+    
+
+  <script
+  src="http://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+	
+  <script src="{{url_for('static', filename='js/jquery-2.1.1.min.js')}}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+	<script type="text/javascript" src="{{url_for('static', filename='js/development.js')}}"></script>
+	<script src="{{url_for('static', filename='js/cytoscape.js')}}"></script>
+  <script src="{{url_for('static', filename='layouts/cose-bilkent/cytoscape-cose-bilkent.js')}}"></script>
+	<script src="{{url_for('static', filename='js/cytoscape-cxtmenu.js')}}"></script>
+	<script type="text/javascript" src="{{url_for('static', filename='js/variable_list.js')}}"></script>
+	<script type="text/javascript" src="{{url_for('static', filename='js/concept_map_rendering_functions.js')}}"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+
+
+	<link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles/new-output.css')}}"> 
+	<link rel="shortcut icon" href="/">
+
+
+</head>
+<body>
+	
+  <div id="navbar">
+    <a class= "active" href="#">Mind Map</a>
+    <a href="#" onclick="show_full_graph(); return false;">Show Full Graph</a>
+    <a href="#" onclick="reset(); return false;">Reset</a>
+    <a href="#" onclick="downloadimage(); return false;">Download Map</a>
+  </div>
+
+  <div class="grid-container">
+    <div id="map-area"></div>
+	</div>
+	
+  <script type="text/javascript">
+		var cy=create_core_obj(true);
+		LoadFile();
+		setLayout("cose-bilkent", cy);
+
+
+    function downloadimage() {
+        var container = document.getElementById("map-area"); // full page 
+        html2canvas(container, { allowTaint: true }).then(function (canvas) {
+
+            var link = document.createElement("a");
+            document.body.appendChild(link);
+            link.download = "html_image.jpg";
+            link.href = canvas.toDataURL();
+            link.target = '_blank';
+            link.click();
+        });
+    }
+
+	</script>
+</body>
+</html>

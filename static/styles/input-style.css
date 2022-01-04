@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,700');
+*{
+  padding: 0;
+  margin: 0;
+}
+
+body::before{
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.6;
+  background-image: url('../images/background-image.jpg');
+}
+
+.mega-container{
+  max-width: 884px;
+  height: auto;
+  margin: auto auto;
+}
+
+header{
+  margin: 30px 30px;
+  font: 700 1em 'Raleway';
+}
+
+p{
+  font: 300 1em 'Raleway';
+}
+
+.container{
+  display:  grid;
+  margin: auto auto;
+  grid-template-columns: 24% 24% 24% 24%;
+  grid-template-rows: 100px 100px 100px 100px;
+  grid-gap: 10px 10px;
+  /* justify-items: ; */
+}
+
+#input-text{
+  grid-area: 1/1/4/4;
+  font-size: 16px;
+  /* border:  */
+}
+
+#clip-area{
+  background: #378A70;
+  grid-area: 1/4/4/5;
+  display: grid;
+  justify-items: center;
+  grid-template-columns: 98%;
+  grid-gap: 10px;
+  padding: 5px;
+  /* border: solid 2px black; */
+  border-radius: 5px;
+  overflow-y: scroll;
+  width: 98%;
+}
+
+
+.popup {
+  padding: 5px;
+  background: #C5E7E2;
+  border: solid 2px #0F261F;
+  border-radius: 5px;
+  height: 100px;
+  width: 90%;
+  position: relative;
+  display: grid;
+  grid-template-columns: 85% 15%;
+}
+
+.popup .close {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+.popup .content {
+  overflow: auto;
+  grid-area: 1/1/1/2;
+  overflow-y: hidden;
+  text-align: left;
+  color: #000;
+}
+
+#Orignal-clip-box{
+  display: none;
+}
+
+#add-text{
+  grid-area: 4/1/5/2;
+}
+
+#clear-text{
+  grid-area: 4/2/5/3;
+}
+
+#generate{
+  grid-area: 4/3/5/4;
+}
+
+/*  Button Graphics*/
+
+.animate
+{
+	transition: all 0.1s;
+	-webkit-transition: all 0.1s;
+}
+
+button
+{
+	width:150px;
+  font-size: 22px;
+  padding:10px
+}
+
+.blue
+{
+	background-color: #3498DB;
+	border-bottom: 5px solid #2980B9;
+	text-shadow: 0px -2px #2980B9;
+}
+
+.red
+{
+	background-color: #E74C3C;
+	border-bottom: 5px solid #BD3E31;
+	text-shadow: 0px -2px #BD3E31;
+}
+
+.green
+{
+	background-color: #82BF56;
+	border-bottom: 5px solid #669644;
+	text-shadow: 0px -2px #669644;
+}
+
+.yellow
+{
+	background-color: #F2CF66;
+	border-bottom: 5px solid #D1B358;
+	text-shadow: 0px -2px #D1B358;
+}
+
+.action-button:active
+{
+	transform: translate(0px,5px);
+  -webkit-transform: translate(0px,5px);
+	border-bottom: 1px solid;
+}

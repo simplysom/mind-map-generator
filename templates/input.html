@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Input Page</title>
+    <!-- <link rel="stylesheet" href="../static/styles/input-style.css"> -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/input.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.1/css/font-awesome.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <style>
+      body{
+        width: 100%;
+        height: 100%;
+        background-image: url('../static/images/background-image2.jpg');
+        background-repeat: no-repeat;
+        background-position: right 0 top 0;
+      }
+    </style>
+
+    <script type="text/javascript">
+
+    function makePopUpBox(passed_text){
+      var textBox = $("#input-text")[0];
+      if(passed_text){var text=passed_text;}
+      else{
+      var text = textBox.value;}
+      if (text){
+        var popUpBox = $("#Orignal-clip-box").clone();
+        popUpBox.children()[1].innerText = text;
+        popUpBox.attr("id", "");
+        popUpBox.attr("display", "none");
+        textBox.value = "";
+
+        popUpBox.slideDown(function(){
+          $("#clip-area").prepend(popUpBox);
+        });
+      }
+    }
+
+    function closePopUp(x){
+      var a = $(x).parent();
+      a.slideUp(function(){
+        a.remove();
+      });
+    }
+
+    function clearClipArea(){
+      $("#clip-area").children().map(function(){
+        if (this.id != "Orignal-clip-box"){
+          this.remove();
+        }
+      });
+      $("#input-text")[0].value = "";
+    }
+
+    function generate(){
+      var text = $("#input-text")[0].value;
+      $("#clip-area").children().map(function(){
+        if (this.id != "Orignal-clip-box"){
+          text += $(this).children()[1].innerText + "\n\n";
+        }
+      });
+      console.log(text);
+      makePostRequest(text);
+    }
+
+    function makePostRequest(text){
+      var form = document.createElement("form");
+      form.setAttribute("method", "POST");
+      form.setAttribute("action", "/page2")
+
+      var hiddenField = document.createElement("input");
+      hiddenField.setAttribute("type", "hidden");
+      hiddenField.setAttribute("name", "input-text");
+      hiddenField.setAttribute("value", text);
+      form.appendChild(hiddenField);
+
+      document.body.appendChild(form);
+      form.submit();
+    }
+
+    function handleFileSelect(evt) {
+      evt.preventDefault();
+      var files = evt.dataTransfer.items; // FileList object
+
+      // Loop through the FileList and render image files as thumbnails.
+      for (var i = 0; i<files.length; i++) {
+        var f = files[i];
+        var reader = new FileReader();
+
+        // Closure to capture the file information.
+        reader.onload = (function(theFile) {
+          return function(e) {
+            makePopUpBox(reader.result);
+          };
+        })(f);
+
+        // Read in the image file as a data URL.
+        reader.readAsText(f.getAsFile());
+
+      }
+    }
+
+    function allow(evnt){evnt.preventDefault();}
+
+    </script>
+  </head>
+
+  <body>
+    
+    <br>
+    
+      <div style="margin:20px;width: 800px;">
+      
+          <h1>Mind Map</h1>
+
+          <br><br>
+          
+          <textarea style="resize:none" id="input-text" name="input-text" rows="12" cols="72" ondragover="allow(event)" ondrop="handleFileSelect(event)"></textarea>
+          
+          <br><br>
+
+          <div> 
+            <button type = "button"  id="clear-text" class="action-button animate red" name="cleartext" onclick="clearClipArea()">Clear</button>
+            <button type = "button"  id="generate" class="action-button animate blue" name="generate" onclick="generate()">Generate</button>  
+            <button type = "button"  id="generate" class="action-button animate green" onclick="startConverting();">Speak</button>
+            <button type = "button"  id="generate" class="action-button animate yellow" onclick="stopConverting();">Stop</button>
+        </div>
+
+          <br><br>
+          <br><br>
+
+          <h2 style="text-align: justify;">
+            Mind mapping is a technique based on memory and creativity and comprehension and understanding, so when the student or a child uses the mind map, they are using their brain in the way their brain was designed to be used, and so the mind helps them in all learning and cognitive skills. It simply helps them in what the brain does naturally.
+          </h2>
+      
+      </div>
+  
+  </body>
+  <script>
+        
+        var r = document.getElementById('input-text');
+        var speechRecognizer = new webkitSpeechRecognition();
+          
+        function startConverting () {
+            
+              if('webkitSpeechRecognition' in window){
+
+                  speechRecognizer.continuous = true;
+                  speechRecognizer.interimResults = true;
+                  speechRecognizer.lang = 'en-IN';
+                  speechRecognizer.start();
+                  
+                  var finalTranscripts = '';
+                  
+                  speechRecognizer.onresult = function(event){
+                    
+                    var interimTranscripts = '';
+                    for(var i = event.resultIndex; i < event.results.length; i++)
+                    {
+                        var transcript = event.results[i][0].transcript;
+                        transcript.replace("\n", "<br>");
+                      
+                        if(event.results[i].isFinal){
+                          finalTranscripts += transcript;
+                        }
+                        else{
+                          interimTranscripts += transcript;
+                        }
+                    }
+                    
+                    r.value = finalTranscripts + interimTranscripts ;
+                  
+                  };
+                  speechRecognizer.onerror = function (event) {};
+              }
+              else{
+                  r.innerHTML = 'No browser support. Please upgrade your browser';
+              }
+          }
+          function stopConverting()
+          {
+            speechRecognizer.stop();
+          }
+
+  </script>
+</html>
